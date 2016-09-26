@@ -14,7 +14,7 @@ var port = process.env.PORT || 8080;
 var router = express.Router();
 
 router.use(function(req, res, next) {
-  console.log('Something\'s happening... ' + req.body);
+  console.log('Something\'s happening... ' + req.params);
   next();
 });
 
@@ -65,6 +65,16 @@ router.route('/users/:user_id')
         res.json({ message: 'User updated: ' + user.name});
       })
     })
+  })
+  .delete(function(req, res) {
+    User.remove({
+      _id: req.params.user_id
+    }, function(err, user) {
+      if(err) {
+        res.send(err)
+      }
+      res.json({ message: 'Successfully deleted user: ' + user.name })
+    });
   });
 
 // all of our routes will be prefixed by /api
